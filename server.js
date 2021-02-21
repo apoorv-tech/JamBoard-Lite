@@ -1,7 +1,6 @@
 const express = require('express')
 const app = express()
 const expressLayouts = require('express-ejs-layouts')
-const socketio = require('socket.io')
 const Jamboardrouter = require('./routes/Jamboard/jamboard')
 
 
@@ -15,4 +14,25 @@ app.use(express.static('public'))
 
 app.use('/jamboard',Jamboardrouter)
 
+app.get('/',(req,res)=>{
+	res.render('index')
+})
+
 var server = app.listen(process.env.PORT || 3000)
+
+var socket = require('socket.io')
+
+var io = socket(server)
+
+io.sockets.on('connection',newConnection)
+
+function newConnection(socket)
+{
+	console.log('new connection: '+socket.id)
+	socket.on('mouse',mouseMsg)
+
+	function mouseMsg(data)
+	{
+		socket.broadcast.emit('mouse',data) 
+	}
+}

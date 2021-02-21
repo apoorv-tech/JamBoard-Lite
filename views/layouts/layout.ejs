@@ -4,7 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Jamboard</title>
-    <script defer src="javascript/sketch.js"></script>
+    <script src="https://cdn.socket.io/3.1.1/socket.io.min.js" integrity="sha384-gDaozqUvc4HTgo8iZjwth73C6dDDeOJsAgpxBcMpZYztUfjHXpzrpdrHRdVp8ySO" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/p5@1.2.0/lib/p5.js"></script>
+    <% if(locals.fileused != null && locals.fileused == "Jamboard") { %>
+      <script defer src="javascript/sketch.js"></script>
+    <% } %> 
 </head>
 <body>
     <%- body %> 

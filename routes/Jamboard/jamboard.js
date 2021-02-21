@@ -1,8 +1,11 @@
 const express = require('express')
 const router = express.Router()
 
+
 router.get('/',(req,res)=>{
-    res.render('Jamboard/index')
+    res.render('Jamboard/index',{
+        fileused: "Jamboard"
+    })
 })
 
 
