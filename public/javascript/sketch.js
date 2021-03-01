@@ -1,7 +1,8 @@
 var socket
 
 function setup(){
-	createCanvas(600,600) 
+	let mycanvas=createCanvas(600,600)
+	mycanvas.parent("webcanvas") 
 	background(51)
 	socket = io.connect('http://127.0.0.1:3000')
 	socket.on('mouse',newDrawing)
