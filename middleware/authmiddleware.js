@@ -11,6 +11,7 @@ const requireauth = (req,res,next)=>{
                 res.redirect("/login")
             }
             else{
+                res.set('Cache-Control', 'no-cache, private, no-store, must-revalidate, post-check=0, pre-check=0');
                 next()
             }
         })
@@ -19,6 +20,7 @@ const requireauth = (req,res,next)=>{
         {
             next()
         }else{
+            res.set('Cache-Control', 'no-cache, private, no-store, must-revalidate, post-check=0, pre-check=0');
             res.redirect('/login')
         }
     }
@@ -34,20 +36,24 @@ const checkuser = (req,res,next)=>{
             jwt.verify(token,"white Hat wale",async (err,decodedToken)=>{
                 if(err){
                     res.locals.user=null
+                    res.set('Cache-Control', 'no-cache, private, no-store, must-revalidate, post-check=0, pre-check=0');
                     next()
                 }
                 else{
                     let user = await User.findById(decodedToken.id)
+                    res.set('Cache-Control', 'no-cache, private, no-store, must-revalidate, post-check=0, pre-check=0');
                     res.locals.user = user
                     next()
                 }
             })
         }else{
             res.locals.user=null
+            res.set('Cache-Control', 'no-cache, private, no-store, must-revalidate, post-check=0, pre-check=0');
             next()
         }
     }
     else{
+        res.set('Cache-Control', 'no-cache, private, no-store, must-revalidate, post-check=0, pre-check=0');
         next()
     }
 }
