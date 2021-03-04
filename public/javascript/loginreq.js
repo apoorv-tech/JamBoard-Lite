@@ -25,7 +25,7 @@ loginform.addEventListener("submit",async(e)=>{
         }
         else
         {
-            location.assign("/jamboard")
+            location.assign("/dashboard?_id="+data._id)
         }
     } catch (error) {
         console.log(error)

@@ -53,6 +53,7 @@ const checkuser = (req,res,next)=>{
         }
     }
     else{
+        res.locals.user = req.user
         res.set('Cache-Control', 'no-cache, private, no-store, must-revalidate, post-check=0, pre-check=0');
         next()
     }

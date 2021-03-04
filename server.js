@@ -2,6 +2,7 @@ const express = require('express')
 const app = express()
 const expressLayouts = require('express-ejs-layouts')
 const Jamboardrouter = require('./routes/Jamboard/jamboard')
+const dashboardrouter = require('./routes/Jamboard/dashboard')
 const authrouter = require("./routes/authcontroller")
 const {requireauth,checkuser} = require("./middleware/authmiddleware")
 const cookieparser = require("cookie-parser")
@@ -40,6 +41,7 @@ app.use(cookieparser())
 app.use("*",checkuser)
 
 app.use('/jamboard',Jamboardrouter)
+app.use('/dashboard',dashboardrouter)
 app.use('/auth', require('./routes/auth'));
 app.use(authrouter)
 
@@ -65,13 +67,22 @@ var socket = require('socket.io')
 
 var io = socket(server)
 
+io.use(async (socket,next)=>{
+	try {
+		socket.userid = socket.handshake.query._id
+		next()
+	} catch (error) {
+		console.log(error)
+	}
+})
+
 io.sockets.on('connection',newConnection)
 
 const history = []
 
 function newConnection(socket)
 {
-	console.log('new connection: '+socket.id)
+	console.log('new connection: '+socket.userid)
 	socket.on('mouse',mouseMsg)
 
 	for(let item of history)
@@ -82,6 +93,7 @@ function newConnection(socket)
 	function mouseMsg(data)
 	{
 		history.push(data)
+		//console.log(user)
 		socket.broadcast.emit('mouse',data) 
 	}
 }
