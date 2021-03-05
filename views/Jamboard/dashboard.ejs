@@ -1,1 +1,9 @@
-<h1>hello</h1>
+<div>
+    <% jamboards.forEach(jamboard=>{ %>
+        <div><a href="/jamboard?_id=<%= jamboard._id %>"><%= jamboard.name %></a></div>
+    <% }) %> 
+</div>
+<form id="dashboard-form">
+    <input type="text" placeholder="Name" name="name" required/>
+    <button type="submit">Create</button>
+</form>

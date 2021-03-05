@@ -6,7 +6,7 @@ const router = express.Router()
 let userid
 
 
-router.get('/',requireauth,(req,res)=>{
+router.get('/',requireauth,async (req,res)=>{
     userid = res.locals.user._id
     if(req.query._id == null)
     {
@@ -18,7 +18,11 @@ router.get('/',requireauth,(req,res)=>{
         {
             res.redirect(('/dashboard?_id='+userid));
         }else {
-            res.render('Jamboard/dashboard')
+            const Jamboards = await Jamboard.find({ users : userid})
+            res.render('Jamboard/dashboard',{
+                fileused: "dashboard",
+                jamboards : Jamboards
+            })
         }
     }
 })
@@ -26,6 +30,7 @@ router.get('/',requireauth,(req,res)=>{
 
 router.get('/new',async (req,res)=>{
     const jamboard = new Jamboard({
+        name : req.query.name,
         data : [],
         users : [userid]
     })
