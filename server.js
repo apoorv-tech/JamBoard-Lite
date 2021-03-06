@@ -5,11 +5,13 @@ const Jamboardrouter = require('./routes/Jamboard/jamboard')
 const dashboardrouter = require('./routes/Jamboard/dashboard')
 const authrouter = require("./routes/authcontroller")
 const {requireauth,checkuser} = require("./middleware/authmiddleware")
+const Jamboard = require('./models/jamboard')
 const cookieparser = require("cookie-parser")
 const passport = require('passport');
 const session = require('express-session');
 const dotenv = require('dotenv');
 const mongoose = require("mongoose")
+const bodyParser = require('body-parser')
 
 dotenv.config({
 	path:"./config/config.env"
@@ -35,7 +37,7 @@ app.set('layout','layouts/layout')
 app.use(expressLayouts)
 //app.use(methodoverride('_method'))
 app.use(express.static('public'))
-//app.use(bodyParser.urlencoded({limit:'10mb',extended:false}))
+app.use(bodyParser.urlencoded({extended: false}))
 app.use(express.json())
 app.use(cookieparser())
 app.use("*",checkuser)
@@ -90,10 +92,19 @@ function newConnection(socket)
 		socket.emit('mouse',item)
 	}
 
-	function mouseMsg(data)
+	async function  mouseMsg(data)
 	{
-		history.push(data)
-		//console.log(user)
-		socket.broadcast.emit('mouse',data) 
+		await Jamboard.findOne({ _id: socket.userid}).then(async (jam)=>{
+		   //console.log(jam.data)
+		   let points = jam.data
+	 	   history.push(data)
+		   points.push(data)
+		   const result = await Jamboard.updateOne({'_id' : socket.userid},{$set: { 'data' : points}},function(err,res){
+			   if(err) throw err
+		   }).then(async ()=>{
+			    //console.log(user)
+		        //socket.broadcast.emit('mouse',data) 
+		   })
+		})
 	}
 }

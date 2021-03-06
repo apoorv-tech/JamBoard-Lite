@@ -1,1 +1,12 @@
 <div id="webcanvas"></div>
+<form action='/jamboard?_id=<%= jambaord_id %>' method="POST" id="adduser">
+    <select name="add">
+        <% users.forEach(user=>{ %>
+            <option value="<%= user.email %>"><%= user.email %></option>
+        <% }) %> 
+        <% users2.forEach(user2=>{ %>
+            <option value="<%= user2.mail %>"><%= user2.mail %></option>
+        <% }) %> 
+    </select>
+    <button type="submit">Add</button>
+</form>

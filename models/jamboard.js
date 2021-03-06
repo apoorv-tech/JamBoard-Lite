@@ -6,16 +6,9 @@ const JamboardSchema = new mongoose.Schema({
         required : true
     },
     data : [
-        {
-            point: {
-                x: {
-                    type : Number
-                },
-                y: {
-                    type: Number
-                }
-            }
-        }
+       {
+           type : Object
+       }
     ],
     users : [
         {

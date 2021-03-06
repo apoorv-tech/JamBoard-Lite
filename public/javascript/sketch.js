@@ -36,6 +36,7 @@ function mouseDragged()
 		x: mouseX,
 		y: mouseY
 	}
+	
 	socket.emit('mouse',data)
 	noStroke()
 	fill(255)
