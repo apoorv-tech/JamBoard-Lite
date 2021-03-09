@@ -66,6 +66,7 @@ let server = app.listen(process.env.PORT || 4000)
 console.log("app has started")
 
 var socket = require('socket.io')
+const { json } = require('body-parser')
 
 var io = socket(server)
 
@@ -86,9 +87,19 @@ async function newConnection(socket)
 	console.log('new connection: '+socket.jamid)
 	socket.on('mouse',mouseMsg)
 
-	socket.on('join',(data)=>{
-		socket.join(data.user)
+	socket.on('join',async (data)=>{
+		await Jamboard.findOne({ _id: socket.jamid }).then((jam)=>{
+		    const listuser = jam.users
+		    console.log(listuser,"hello")
+		    console.log(data.jam)
+		    console.log(socket.userid)
+		    if(listuser.includes(socket.userid)){
+			    console.log(data.jam+" hello")
+			    socket.join(data.jam)
+		    }
+		})
 	})
+
 
 	await Jamboard.findOne({ _id: socket.jamid }).then((j)=>{
 		const hist = j.data
@@ -113,12 +124,9 @@ async function newConnection(socket)
 		   const result = await Jamboard.updateOne({'_id' : socket.jamid},{$set: { 'data' : points}},function(err,res){
 			   if(err) throw err
 		   }).then(async ()=>{
-			    //console.log(user)
-				console.log(users)
-				console.log(data)
-				users.forEach(u=>{
-					socket.to(socket.userid).emit('mouse',data)
-				})
+			   const room = String(socket.jamid)
+			   console.log(typeof(room),room)
+			   socket.to(room).emit('mouse',data)
 		   })
 		})
 	}

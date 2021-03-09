@@ -24,7 +24,7 @@ function setup(){
 			_uid: userid 
 		}
 	})
-	socket.emit('join',{user : userid})
+	socket.emit('join',{jam : jamid})
 	socket.on('mouse',newDrawing)
 }
 
