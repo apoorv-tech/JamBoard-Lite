@@ -88,26 +88,29 @@ async function newConnection(socket)
 	socket.on('mouse',mouseMsg)
 
 	socket.on('join',async (data)=>{
-		await Jamboard.findOne({ _id: socket.jamid }).then((jam)=>{
-		    const listuser = jam.users
+		await Jamboard.findOne({ _id: socket.jamid }).then((jaam)=>{
+		    const listuser = jaam.users
 		    console.log(listuser,"hello")
 		    console.log(data.jam)
 		    console.log(socket.userid)
 		    if(listuser.includes(socket.userid)){
 			    console.log(data.jam+" hello")
 			    socket.join(data.jam)
+
+				const hist = jaam.data
+				for(let item of hist)
+				{
+					socket.emit('mouse',item)
+				}
+
 		    }
 		})
 	})
 
+	//data, jam , data.jam
 
-	await Jamboard.findOne({ _id: socket.jamid }).then((j)=>{
-		const hist = j.data
-		for(let item of hist)
-		{
-			socket.emit('mouse',item)
-		}
-	})
+
+
 
 	socket.on('disconnecting', () => {
 		console.log(socket.rooms);
@@ -120,14 +123,23 @@ async function newConnection(socket)
 		   //console.log(jam.data)
 		   let points = jam.data
 		   let users = jam.users
+		   console.log("before pushing");
+		   console.log(points.length);
 		   points.push(data)
+		   console.log("\n\n after pushing");
+		   console.log(points.length);
 		   const result = await Jamboard.updateOne({'_id' : socket.jamid},{$set: { 'data' : points}},function(err,res){
 			   if(err) throw err
-		   }).then(async ()=>{
+			   
+		   }).
+		   then(async ()=>{
+			
 			   const room = String(socket.jamid)
-			   console.log(typeof(room),room)
+			//    console.log(typeof(room),room)
 			   socket.to(room).emit('mouse',data)
-		   })
+		   }
+		   
+		   )
 		})
 	}	
 }
