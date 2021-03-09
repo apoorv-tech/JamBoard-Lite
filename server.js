@@ -117,29 +117,42 @@ async function newConnection(socket)
 	  });
 
 
-	async function  mouseMsg(data)
+	async function  mouseMsg(arr)
 	{
 		await Jamboard.findOne({ _id: socket.jamid }).then(async (jam)=>{
 		   //console.log(jam.data)
 		   let points = jam.data
-		   let users = jam.users
+		//    let users = jam.users
 		   console.log("before pushing");
 		   console.log(points.length);
-		   points.push(data)
+		   for(let i=0;i<arr.length;i++){
+			   points.push(arr[i])
+		   }
+		//    points.push(data)
 		   console.log("\n\n after pushing");
 		   console.log(points.length);
-		   const result = await Jamboard.updateOne({'_id' : socket.jamid},{$set: { 'data' : points}},function(err,res){
-			   if(err) throw err
-			   
-		   }).
-		   then(async ()=>{
+		   try {
+			const result = await Jamboard.updateOne({'_id' : socket.jamid},{$set: { 'data' : points}},function(err,res){
+				if(err) throw err
+				
+			}).
+			then(async ()=>{
+			 
+				const room = String(socket.jamid)
+			 //    console.log(typeof(room),room)
+			 for (let index = 0; index < arr.length; index++) {
+				socket.to(room).emit('mouse',arr[i])
+				 
+			 }
+				
+ 
+			}
 			
-			   const room = String(socket.jamid)
-			//    console.log(typeof(room),room)
-			   socket.to(room).emit('mouse',data)
+			)
+		   } catch (error) {
+			   console.log(error);
 		   }
 		   
-		   )
 		})
 	}	
 }

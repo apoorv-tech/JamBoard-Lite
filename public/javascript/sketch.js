@@ -11,7 +11,7 @@ function getParameterByName(name, url = window.location.href) {
 
 const jamid = getParameterByName('_id')
 const userid = getParameterByName('_uid')
-
+let arr=[];
 function setup(){
 	let mycanvas=createCanvas(600,600)
 	mycanvas.parent("webcanvas") 
@@ -35,14 +35,17 @@ function newDrawing(data){
 	fill(255)
 	ellipse(data.x,data.y,10,10)
 }
-
+function mouseReleased(){
+socket.emit('mouse',arr);
+arr=[]
+}
 function mouseDragged()
 {
 	var data= {
 		x: mouseX,
 		y: mouseY
 	}
-	socket.emit('mouse',data)
+	arr.push(data);
 	noStroke()
 	fill(255)
 	ellipse(mouseX,mouseY,10,10)
