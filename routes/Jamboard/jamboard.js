@@ -19,7 +19,37 @@ router.get('/',requireauth,async (req,res)=>{
         userid : req.query._uid
     })
 })
+router.get('/clear',requireauth,async (req,res)=>{
+    // console.log(req.query._id)
+    // console.log(req.query._uid)
 
+    await Jamboard.findOne({ _id: req.query._id }).then(async (jam)=>{
+        //console.log(jam.data)
+        let points = jam.data
+    
+        points=[]
+        try {
+         const result = await Jamboard.updateOne({'_id' : req.query._id},{$set: { 'data' : points}},function(err,res){
+             if(err) throw err
+             
+         }).
+         then(async ()=>{
+          
+            res.redirect('/jamboard?_id='+req.query._id+'&_uid='+req.query._uid)
+             
+
+         }
+         
+         )
+        } catch (error) {
+            console.log(error);
+        }
+        
+     })
+ 
+    
+    
+})
 router.post('/',requireauth,async (req,res)=>{
     console.log(req.body.add)
     const jam = await Jamboard.findOne({_id : req.query})
