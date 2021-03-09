@@ -21,7 +21,8 @@ router.get('/',requireauth,async (req,res)=>{
             const Jamboards = await Jamboard.find({ users : userid})
             res.render('Jamboard/dashboard',{
                 fileused: "dashboard",
-                jamboards : Jamboards
+                jamboards : Jamboards,
+                userid : userid
             })
         }
     }
@@ -36,7 +37,7 @@ router.get('/new',async (req,res)=>{
     })
     try {
         const newJamboard = await jamboard.save()
-        res.redirect('/jamboard?_id='+newJamboard._id)
+        res.redirect('/jamboard?_id='+newJamboard._id+'&_uid='+req.query._id)
     } catch (error) {
         console.log(error)
     }

@@ -8,13 +8,15 @@ const router = express.Router()
 
 router.get('/',requireauth,async (req,res)=>{
     console.log(req.query._id)
+    console.log(req.query._uid)
     const allusers = await User.find({})
     const allusers2 = await User2.find({})
     res.render('Jamboard/index',{
         fileused: "Jamboard",
         users : allusers,
         users2 : allusers2,
-        jambaord_id : req.query._id
+        jambaord_id : req.query._id,
+        userid : req.query._uid
     })
 })
 
@@ -39,7 +41,7 @@ router.post('/',requireauth,async (req,res)=>{
             if(err) throw err
         })
     }
-    res.redirect('/jamboard?_id='+req.query._id)
+    res.redirect('/jamboard?_id='+req.query._id+'&_uid='+req.query._uid)
 })
 
 module.exports =  router

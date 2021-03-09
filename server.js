@@ -71,7 +71,8 @@ var io = socket(server)
 
 io.use(async (socket,next)=>{
 	try {
-		socket.userid = socket.handshake.query._id
+		socket.jamid = socket.handshake.query._id
+		socket.userid = socket.handshake.query._uid
 		next()
 	} catch (error) {
 		console.log(error)
@@ -80,30 +81,44 @@ io.use(async (socket,next)=>{
 
 io.sockets.on('connection',newConnection)
 
-const history = []
-
-function newConnection(socket)
+async function newConnection(socket)
 {
-	console.log('new connection: '+socket.userid)
+	console.log('new connection: '+socket.jamid)
 	socket.on('mouse',mouseMsg)
 
-	for(let item of history)
-	{
-		socket.emit('mouse',item)
-	}
+	socket.on('join',(data)=>{
+		socket.join(data.user)
+	})
+
+	await Jamboard.findOne({ _id: socket.jamid }).then((j)=>{
+		const hist = j.data
+		for(let item of hist)
+		{
+			socket.emit('mouse',item)
+		}
+	})
+
+	socket.on('disconnecting', () => {
+		console.log(socket.rooms);
+	  });
+
 
 	async function  mouseMsg(data)
 	{
-		await Jamboard.findOne({ _id: socket.userid}).then(async (jam)=>{
+		await Jamboard.findOne({ _id: socket.jamid }).then(async (jam)=>{
 		   //console.log(jam.data)
 		   let points = jam.data
-	 	   history.push(data)
+		   let users = jam.users
 		   points.push(data)
-		   const result = await Jamboard.updateOne({'_id' : socket.userid},{$set: { 'data' : points}},function(err,res){
+		   const result = await Jamboard.updateOne({'_id' : socket.jamid},{$set: { 'data' : points}},function(err,res){
 			   if(err) throw err
 		   }).then(async ()=>{
 			    //console.log(user)
-		        //socket.broadcast.emit('mouse',data) 
+				console.log(users)
+				console.log(data)
+				users.forEach(u=>{
+					socket.to(socket.userid).emit('mouse',data)
+				})
 		   })
 		})
 	}

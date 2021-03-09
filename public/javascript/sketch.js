@@ -9,22 +9,28 @@ function getParameterByName(name, url = window.location.href) {
     return decodeURIComponent(results[2].replace(/\+/g, ' '));
 }
 
-const userid = getParameterByName('_id')
+const jamid = getParameterByName('_id')
+const userid = getParameterByName('_uid')
 
 function setup(){
 	let mycanvas=createCanvas(600,600)
 	mycanvas.parent("webcanvas") 
 	background(51)
+	console.log(jamid)
 	console.log(userid)
 	socket = io.connect('http://127.0.0.1:4000',{
 		query: {
-			_id: userid 
+			_id: jamid,
+			_uid: userid 
 		}
 	})
+	socket.emit('join',{user : userid})
 	socket.on('mouse',newDrawing)
 }
 
 function newDrawing(data){
+	console.log(data)
+	console.log(data.x,data.y)
 	noStroke()
 	fill(255)
 	ellipse(data.x,data.y,10,10)
@@ -36,7 +42,6 @@ function mouseDragged()
 		x: mouseX,
 		y: mouseY
 	}
-	
 	socket.emit('mouse',data)
 	noStroke()
 	fill(255)
