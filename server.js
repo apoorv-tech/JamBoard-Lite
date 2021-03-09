@@ -66,7 +66,7 @@ let server = app.listen(process.env.PORT || 4000)
 console.log("app has started")
 
 var socket = require('socket.io')
-
+const {json} = require('body-parser');
 var io = socket(server)
 
 io.use(async (socket,next)=>{
@@ -114,10 +114,12 @@ async function newConnection(socket)
 			   if(err) throw err
 		   }).then(async ()=>{
 			    //console.log(user)
-				console.log(users)
-				console.log(data)
+				// console.log(users)
+				// console.log(data)
 				users.forEach(u=>{
-					socket.to(socket.userid).emit('mouse',data)
+					// socket.to(socket.userid).emit('mouse',data)
+					const room  = String(u)
+					socket.to(room).emit('mouse',data)
 				})
 		   })
 		})
