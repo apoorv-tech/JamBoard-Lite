@@ -13,7 +13,7 @@ const jamid = getParameterByName('_id')
 const userid = getParameterByName('_uid')
 let arr=[];
 function setup(){
-	let mycanvas=createCanvas(600,600)
+	let mycanvas=createCanvas(innerWidth,550)
 	mycanvas.parent("webcanvas") 
 	background(51)
 	console.log(jamid)
@@ -32,7 +32,7 @@ function newDrawing(data){
 	console.log(data)
 	console.log(data.x,data.y)
 	noStroke()
-	fill(255)
+	fill(255,0,100)
 	ellipse(data.x,data.y,10,10)
 }
 function mouseReleased(){
@@ -47,7 +47,7 @@ function mouseDragged()
 	}
 	arr.push(data);
 	noStroke()
-	fill(255)
+	fill(255,0,100)
 	ellipse(mouseX,mouseY,10,10)
 }
 
