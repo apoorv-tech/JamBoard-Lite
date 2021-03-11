@@ -141,7 +141,7 @@ async function newConnection(socket)
 				const room = String(socket.jamid)
 			 //    console.log(typeof(room),room)
 			 for (let index = 0; index < arr.length; index++) {
-				socket.to(room).emit('mouse',arr[i])
+				socket.to(room).emit('mouse',arr[index])
 				 
 			 }
 				
