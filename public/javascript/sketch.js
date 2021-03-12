@@ -12,6 +12,14 @@ function getParameterByName(name, url = window.location.href) {
 const jamid = getParameterByName('_id')
 const userid = getParameterByName('_uid')
 let arr=[];
+let dragged = false
+
+const clearbtn = document.querySelector("#btnerase")
+
+clearbtn.addEventListener('click',async(e)=>{
+	socket.emit('erase')
+})
+
 function setup(){
 	let mycanvas=createCanvas(innerWidth,550)
 	mycanvas.parent("webcanvas") 
@@ -26,7 +34,10 @@ function setup(){
 	})
 	socket.emit('join',{jam : jamid})
 	socket.on('mouse',newDrawing)
+	socket.on('eraseall',erasemsg)
 }
+
+console.log(clearbtn)
 
 function newDrawing(data){
 	console.log(data)
@@ -36,11 +47,19 @@ function newDrawing(data){
 	ellipse(data.x,data.y,10,10)
 }
 function mouseReleased(){
-socket.emit('mouse',arr);
-arr=[]
+	if(dragged)
+	{
+		console.log('inside released if')
+		socket.emit('mouse',arr);
+	    arr=[]
+		dragged=false	
+	}
 }
+
+
 function mouseDragged()
 {
+	dragged = true
 	var data= {
 		x: mouseX,
 		y: mouseY
@@ -49,6 +68,11 @@ function mouseDragged()
 	noStroke()
 	fill(255,0,100)
 	ellipse(mouseX,mouseY,10,10)
+}
+
+function erasemsg(data)
+{
+	location.assign('/jamboard?_id='+data.jamid+'&_uid='+data.userid)
 }
 
 function draw()

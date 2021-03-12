@@ -88,6 +88,7 @@ async function newConnection(socket)
 	socket.on('mouse',mouseMsg)
 
 	socket.on('join',async (data)=>{
+		console.log('join is trigerred')
 		await Jamboard.findOne({ _id: socket.jamid }).then((jaam)=>{
 		    const listuser = jaam.users
 		    console.log(listuser,"hello")
@@ -107,18 +108,38 @@ async function newConnection(socket)
 		})
 	})
 
+	socket.on('erase',async ()=>{
+		console.log('erase is trigerred')
+		await Jamboard.findOne({ _id: socket.jamid }).then(async (jam)=>{
+			let points = jam.data
+			points = []
+			try {
+			 const result = await Jamboard.updateOne({'_id' : socket.jamid},{$set: { 'data' : points}},function(err,res){
+				 if(err) throw err	
+			 }).
+			 then(async ()=>{
+				const room = String(socket.jamid)
+				const cleardata = {
+					jamid : socket.jamid,
+					userid : socket.userid
+				}
+				io.to(room).emit('eraseall',cleardata)
+			}
+			)
+			} catch (error) {
+				console.log(error);
+			}			
+		 })
+	})
+
 	//data, jam , data.jam
-
-
-
-
 	socket.on('disconnecting', () => {
 		console.log(socket.rooms);
 	  });
 
-
 	async function  mouseMsg(arr)
 	{
+		console.log('share is trigerred')
 		await Jamboard.findOne({ _id: socket.jamid }).then(async (jam)=>{
 		   //console.log(jam.data)
 		   let points = jam.data
@@ -133,21 +154,15 @@ async function newConnection(socket)
 		   console.log(points.length);
 		   try {
 			const result = await Jamboard.updateOne({'_id' : socket.jamid},{$set: { 'data' : points}},function(err,res){
-				if(err) throw err
-				
+				if(err) throw err	
 			}).
 			then(async ()=>{
-			 
 				const room = String(socket.jamid)
 			 //    console.log(typeof(room),room)
-			 for (let index = 0; index < arr.length; index++) {
-				socket.to(room).emit('mouse',arr[index])
-				 
+				for (let index = 0; index < arr.length; index++) {
+					socket.to(room).emit('mouse',arr[index])	 
+				}
 			 }
-				
- 
-			}
-			
 			)
 		   } catch (error) {
 			   console.log(error);
