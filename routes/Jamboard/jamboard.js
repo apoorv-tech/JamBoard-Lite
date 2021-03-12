@@ -94,8 +94,7 @@ router.delete('/',requireauth,async (req,res)=>{
             if(jamown == usercomp)
             {
                 console.log('removing jamboard')
-                jamboard = await Jamboard.findById(req.query._id)
-                await Jamboard.remove()
+                await Jamboard.deleteOne({_id:req.query._id})
             }else {
                 const index = users.indexOf(user._id);
                 users.splice(index, 1);
@@ -118,8 +117,7 @@ router.delete('/',requireauth,async (req,res)=>{
             if(jamown == usercomp)
             {
                 console.log('removing jamboard')
-                jamboard = await Jamboard.findById(req.query._id)
-                await Jamboard.remove()
+                await Jamboard.deleteOne({_id:req.query._id})
             }else {
                 const index = users.indexOf(user._id);
                 users.splice(index, 1);
