@@ -10,11 +10,11 @@ function getParameterByName(name, url = window.location.href) {
     return decodeURIComponent(results[2].replace(/\+/g, ' '));
 }
 
-const userid = getParameterByName('_id')
+const userid = getParameterByName('_uid')
 
 dashboard.addEventListener("submit",async(e)=>{
     e.preventDefault()
     const name = dashboard.name.value
     console.log(name)
-    location.assign('/dashboard/new?name='+name+'&_id='+userid)
+    location.assign('/dashboard/new?name='+name+'&_uid='+userid)
 })

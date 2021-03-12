@@ -1,6 +1,9 @@
 <div>
     <% jamboards.forEach(jamboard=>{ %>
         <div><a href="/jamboard?_id=<%= jamboard._id %>&_uid=<%= userid %>"><%= jamboard.name %></a></div>
+        <form method="POST" action="/jamboard?_id=<%= jamboard._id %>&_uid=<%= userid %>&_method=DELETE">
+            <button type="sumbit">Delete</button>
+        </form>
     <% }) %> 
 </div>
 <form id="dashboard-form">

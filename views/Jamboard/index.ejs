@@ -1,5 +1,5 @@
 <div id="webcanvas"></div>
-<form action='/jamboard?_id=<%= jambaord_id %>&_uid=<%= userid %>' method="POST" id="adduser">
+<form method="POST" action='/jamboard?_id=<%= jambaord_id %>&_uid=<%= userid %>&_method=PUT' id="adduser">
     <select name="add">
         <% users.forEach(user=>{ %>
             <option value="<%= user.email %>"><%= user.email %></option>

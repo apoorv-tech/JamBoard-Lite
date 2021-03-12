@@ -7,6 +7,7 @@ const authrouter = require("./routes/authcontroller")
 const {requireauth,checkuser} = require("./middleware/authmiddleware")
 const Jamboard = require('./models/jamboard')
 const cookieparser = require("cookie-parser")
+const methodoverride = require('method-override')
 const passport = require('passport');
 const session = require('express-session');
 const dotenv = require('dotenv');
@@ -37,6 +38,7 @@ app.set('layout','layouts/layout')
 app.use(expressLayouts)
 //app.use(methodoverride('_method'))
 app.use(express.static('public'))
+app.use(methodoverride('_method'))
 app.use(bodyParser.urlencoded({extended: false}))
 app.use(express.json())
 app.use(cookieparser())
