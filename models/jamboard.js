@@ -15,8 +15,16 @@ const JamboardSchema = new mongoose.Schema({
     ],
     users : [
         {
-            type: mongoose.Schema.Types.ObjectId
+            userid: { 
+                type: mongoose.Schema.Types.ObjectId
+            },
+
+            permissionWrite:{
+                type:Boolean
+            }
+
         }
+
     ]
 })
 

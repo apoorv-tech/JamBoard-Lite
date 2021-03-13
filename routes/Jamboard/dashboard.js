@@ -18,7 +18,7 @@ router.get('/',requireauth,async (req,res)=>{
         {
             res.redirect(('/dashboard?_uid='+userid));
         }else {
-            const Jamboards = await Jamboard.find({ users : userid})
+            const Jamboards = await Jamboard.find({ "users.userid" : userid})
             res.render('Jamboard/dashboard',{
                 fileused: "dashboard",
                 jamboards : Jamboards,
@@ -30,11 +30,20 @@ router.get('/',requireauth,async (req,res)=>{
 
 
 router.get('/new',requireauth,async (req,res)=>{
+    let userArr = []
+    
+    const u1 = {
+        userid: res.locals.user._id,
+        permissionWrite:true
+    }
+
+
+    userArr.push(u1)
     const jamboard = new Jamboard({
         owner : req.query._uid,
         name : req.query.name,
         data : [],
-        users : [userid]
+        users : userArr
     })
     try {
         const newJamboard = await jamboard.save()
