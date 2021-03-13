@@ -16,5 +16,7 @@ dashboard.addEventListener("submit",async(e)=>{
     e.preventDefault()
     const name = dashboard.name.value
     console.log(name)
+    
     location.assign('/dashboard/new?name='+name+'&_uid='+userid)
+
 })

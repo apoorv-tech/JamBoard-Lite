@@ -27,8 +27,27 @@ router.get('/',requireauth,async (req,res)=>{
                     res.redirect('/jamboard?_id='+req.query._id+'&_uid='+res.locals.user._id)
                 }
                 else{
+                    const obj1 =
+                    {
+                        userid:res.locals.user._id,
+                        permissionWrite:true
+                    }
+                    let exists=false;
                     let users = result.users;
-                    if (users.includes(res.locals.user._id)) {
+                    console.log("users arrary is : "+users);
+                    for (let index = 0; index < users.length; index++) {
+                        const element = users[index];
+                        console.log("element" + element);
+                        const eluserid = String(element.userid)
+                        const reslocal = String(res.locals.user._id)
+                        if (eluserid==reslocal) {
+                            exists=true;
+                            break;
+                        }
+                        
+                    }
+                    console.log("exists "+exists)
+                    if (exists) {
                         res.render('Jamboard/index',{
                             fileused: "Jamboard",
                             users : allusers,
@@ -52,15 +71,41 @@ router.get('/',requireauth,async (req,res)=>{
 })
 
 router.put('/',requireauth,async (req,res)=>{
+    console.log("hi in line 74");
     console.log(req.body.add)
+    let checkbaaks = req.body.myCheck
+    console.log(checkbaaks);
+    let varpermision = false;
+    if (checkbaaks) {
+        varpermision=true
+    }
     const jam = await Jamboard.findOne({_id : req.query})
     let users = []
     let user = await User.findOne({email : req.body.add})
     if(user)
     {
         users = jam.users
-        if(!(users.includes(user._id))){
-            users.push(user._id)
+        let exists = false;
+        for (let index = 0; index < users.length; index++) {
+            const element = users[index];
+            console.log("element" + element);
+            const eluserid = String(element.userid)
+            const reslocal = String(res.locals.user._id)
+            if (eluserid==user._id) {
+                exists=true;
+                break;
+            }
+            
+        }
+        console.log("exists on l100 is "+exists);
+        if(!exists){
+
+            const obj1 =
+                    {
+                        userid:user._id,
+                        permissionWrite:!(varpermision)
+                    }
+            users.push(obj1)
             Jamboard.updateOne({'_id' : req.query._id},{$set: { 'users' : users}},function(err,res){
                 if(err) throw err
             })
@@ -69,8 +114,25 @@ router.put('/',requireauth,async (req,res)=>{
     else {
         user = await User2.findOne({mail : req.body.add})
         users = jam.users
-        if(!(users.includes(user._id))){
-            users.push(user._id)
+        let exists = false;
+        for (let index = 0; index < users.length; index++) {
+            const element = users[index];
+            console.log("element" + element);
+            const eluserid = String(element.userid)
+           
+            if (eluserid==user._id) {
+                exists=true;
+                break;
+            }
+            
+        }
+        if(!exists){
+            const obj1 =
+                    {
+                        userid:user._id,
+                        permissionWrite:!(varpermision)
+                    }
+            users.push(obj1)
             Jamboard.updateOne({'_id' : req.query._id},{$set: { 'users' : users}},function(err,res){
                 if(err) throw err
             })
