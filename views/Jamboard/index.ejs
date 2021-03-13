@@ -1,20 +1,22 @@
 <div id="webcanvas"></div>
-<form method="POST" action='/jamboard?_id=<%= jambaord_id %>&_uid=<%= userid %>&_method=PUT' id="adduser">
-    <select name="add">
-        <% users.forEach(user=>{ %>
-            <option value="<%= user.email %>"><%= user.email %></option>
-        <% }) %> 
-        <% users2.forEach(user2=>{ %>
-            <option value="<%= user2.mail %>"><%= user2.mail %></option>
-        <% }) %> 
-    </select>
-    <label >Read Only:</label> 
-    <input type="checkbox"  name="myCheck" >
-    <button type="submit">Add</button>
-   
-</form>
+<% if(String(owner)==String(userid)) { %>
+    <form method="POST" action='/jamboard?_id=<%= jambaord_id %>&_uid=<%= userid %>&_method=PUT' id="adduser">
+        <select name="add">
+            <% users.forEach(user=>{ %>
+                <option value="<%= user.email %>"><%= user.email %></option>
+            <% }) %> 
+            <% users2.forEach(user2=>{ %>
+                <option value="<%= user2.mail %>"><%= user2.mail %></option>
+            <% }) %> 
+        </select>
+        <label >Read Only:</label> 
+        <input type="checkbox"  name="myCheck" >
+        <button type="submit">Add</button>
+    </form>    
+<% }%> 
 
-
-<div style="text-align: center;">
-    <button id="btnerase">Clear</button>
-</div>
+<% if(perm) { %>
+    <div style="text-align: center;">
+        <button id="btnerase">Clear</button>
+    </div>
+<% }%> 

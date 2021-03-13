@@ -11,14 +11,19 @@ function getParameterByName(name, url = window.location.href) {
 
 const jamid = getParameterByName('_id')
 const userid = getParameterByName('_uid')
+const perm = getParameterByName('p')
 let arr=[];
 let dragged = false
 
 const clearbtn = document.querySelector("#btnerase")
+console.log('permission is '+perm+' and its type is '+typeof(perm))
 
-clearbtn.addEventListener('click',async(e)=>{
-	socket.emit('erase')
-})
+if(perm!='false')
+{
+	clearbtn.addEventListener('click',async(e)=>{
+		socket.emit('erase')
+	})
+}
 
 function setup(){
 	let mycanvas=createCanvas(innerWidth,550)
@@ -47,32 +52,38 @@ function newDrawing(data){
 	ellipse(data.x,data.y,10,10)
 }
 function mouseReleased(){
-	if(dragged)
+	if(perm!="false")
 	{
-		console.log('inside released if')
-		socket.emit('mouse',arr);
-	    arr=[]
-		dragged=false	
+		if(dragged)
+		{
+			console.log('inside released if')
+			socket.emit('mouse',arr);
+			arr=[]
+			dragged=false	
+		}
 	}
 }
 
 
 function mouseDragged()
 {
-	dragged = true
-	var data= {
-		x: mouseX,
-		y: mouseY
+	if(perm!="false")
+	{
+		dragged = true
+		var data= {
+			x: mouseX,
+			y: mouseY
+		}
+		arr.push(data);
+		noStroke()
+		fill(255,0,100)
+		ellipse(mouseX,mouseY,10,10)
 	}
-	arr.push(data);
-	noStroke()
-	fill(255,0,100)
-	ellipse(mouseX,mouseY,10,10)
 }
 
 function erasemsg(data)
 {
-	location.assign('/jamboard?_id='+data.jamid+'&_uid='+data.userid)
+	location.assign('/jamboard?_id='+data.jamid+'&_uid='+data.userid+'&p='+perm)
 }
 
 function draw()
