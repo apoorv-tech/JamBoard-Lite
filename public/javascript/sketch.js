@@ -8,7 +8,9 @@ function getParameterByName(name, url = window.location.href) {
     if (!results[2]) return '';
     return decodeURIComponent(results[2].replace(/\+/g, ' '));
 }
-
+function _(selector){
+	return document.querySelector(selector);
+  }
 const jamid = getParameterByName('_id')
 const userid = getParameterByName('_uid')
 const perm = getParameterByName('p')
@@ -57,9 +59,19 @@ console.log(clearbtn)
 function newDrawing(data){
 	console.log(data)
 	console.log(data.x,data.y)
-	noStroke()
-	fill(255,0,100)
-	ellipse(data.x,data.y,10,10)
+		let type =data.typepen
+		let size = data.sizepen
+		let color = data.colorpen
+		fill(color);
+		stroke(color);
+		
+		if(type == "pencil"){
+			// mouseX = data.x
+			// mouseY=data.y
+			line(data.px, data.py, data.x, data.y);
+		  } else {
+			ellipse(data.x, data.y, size, size);
+		  }
 }
 
 function newerasedDrawing(data){
@@ -88,6 +100,9 @@ function mouseReleased(){
 
 function mouseDragged()
 {
+	let type = _("#pen-pencil").checked?"pencil":"brush";
+		let size = parseInt(_("#pen-size").value);
+		let color = _("#pen-color").value;
 	if(perm!="false")
 	{
 		dragged = true
@@ -98,12 +113,23 @@ function mouseDragged()
 		}
 		var data= {
 			x: mouseX,
-			y: mouseY
+			y: mouseY,
+			typepen:type,
+			sizepen:size,
+			colorpen:color,
+			px:pmouseX,
+			py:pmouseY
 		}
 		arr.push(data);
-		noStroke()
-		fill(255,0,100)
-		ellipse(mouseX,mouseY,10,10)
+		fill(color);
+		stroke(color);
+
+		if(type == "pencil"){
+			line(pmouseX, pmouseY, mouseX, mouseY);
+		  } else {
+			ellipse(mouseX, mouseY, size, size);
+		  }
+
 	}
 }
 
