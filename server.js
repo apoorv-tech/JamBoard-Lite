@@ -145,6 +145,42 @@ async function newConnection(socket)
 		 })
 	})
 
+
+
+	socket.on('eraser',async (arr)=>{
+		console.log('eraser is trigerred')
+		await Jamboard.findOne({ _id: socket.jamid }).then(async (jam)=>{
+			let points = jam.data
+			for(let i=0;i<points.length;i++){
+				let contains = arr.some(elem =>{
+					return JSON.stringify(points[i]) === JSON.stringify(elem);
+				})
+				console.log('Contains is '+contains)
+				if(contains){
+					console.log('eraser is erasing this point')
+					let index = points.findIndex((point)=> point===points[i])
+					points.splice(index,1)
+				}
+			}
+			try {
+			 const result = await Jamboard.updateOne({'_id' : socket.jamid},{$set: { 'data' : points}},function(err,res){
+				 if(err) throw err	
+			 }).
+			 then(async ()=>{
+				const room = String(socket.jamid)
+				const cleardata = {
+					jamid : socket.jamid,
+					userid : socket.userid
+				}
+				io.to(room).emit('eraser',cleardata)
+			}
+			)
+			} catch (error) {
+				console.log(error);
+			}			
+		 })
+	})
+
 	//data, jam , data.jam
 	socket.on('disconnecting', () => {
 		console.log(socket.rooms);
