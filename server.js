@@ -146,38 +146,47 @@ async function newConnection(socket)
 	})
 
 
+    //eraser deltes the point
+	// socket.on('eraser',async (arr)=>{
+	// 	console.log('eraser is trigerred')
+	// 	await Jamboard.findOne({ _id: socket.jamid }).then(async (jam)=>{
+	// 		let points = jam.data
+	// 		for(let i=0;i<points.length;i++){
+	// 			console.log('type of point is '+typeof(points[i]))
+	// 			let contains = arr.some(elem =>{
+	// 				return JSON.stringify(points[i]) === JSON.stringify(elem);
+	// 			})
+	// 			console.log('Contains is '+contains)
+	// 			if(contains){
+	// 				console.log('eraser is erasing this point'+'x is '+points[i].x+' y is '+points[i].y)
+	// 				let index = points.findIndex((point)=> point===points[i])
+	// 				points.splice(index,1)
+	// 			}
+	// 		}
+	// 		try {
+	// 		 const result = await Jamboard.updateOne({'_id' : socket.jamid},{$set: { 'data' : points}},function(err,res){
+	// 			 if(err) throw err	
+	// 		 }).
+	// 		 then(async ()=>{
+	// 			 console.log('erased data updated')
+	// 		}
+	// 		)
+	// 		} catch (error) {
+	// 			console.log(error);
+	// 		}			
+	// 	 })
+	// })
 
-	socket.on('eraser',async (arr)=>{
-		console.log('eraser is trigerred')
+	//sending the erased data to other users in room
+	socket.on('erasing',async (data)=>{
+		console.log('erasing is trigerred')
 		await Jamboard.findOne({ _id: socket.jamid }).then(async (jam)=>{
-			let points = jam.data
-			for(let i=0;i<points.length;i++){
-				let contains = arr.some(elem =>{
-					return JSON.stringify(points[i]) === JSON.stringify(elem);
-				})
-				console.log('Contains is '+contains)
-				if(contains){
-					console.log('eraser is erasing this point')
-					let index = points.findIndex((point)=> point===points[i])
-					points.splice(index,1)
-				}
-			}
 			try {
-			 const result = await Jamboard.updateOne({'_id' : socket.jamid},{$set: { 'data' : points}},function(err,res){
-				 if(err) throw err	
-			 }).
-			 then(async ()=>{
 				const room = String(socket.jamid)
-				const cleardata = {
-					jamid : socket.jamid,
-					userid : socket.userid
-				}
-				io.to(room).emit('eraser',cleardata)
-			}
-			)
+				socket.to(room).emit('erasing',data)	 
 			} catch (error) {
-				console.log(error);
-			}			
+				console.log(error)
+			}		
 		 })
 	})
 

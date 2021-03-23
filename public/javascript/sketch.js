@@ -21,11 +21,12 @@ let eraserenable = false
 const clearbtn = document.querySelector("#btnerase")
 const eraser = document.querySelector("#eraser")
 console.log('permission is '+perm+' and its type is '+typeof(perm))
+console.log(eraser)
 
 
 function setup(){
 	let mycanvas=createCanvas(innerWidth,550)
-	mycanvas.parent("webcanvas") 
+	mycanvas.parent("#webcanvas") 
 	background(51)
 	console.log(jamid)
 	console.log(userid)
@@ -37,18 +38,19 @@ function setup(){
 	})
 	socket.emit('join',{jam : jamid})
 	socket.on('mouse',newDrawing)
-	socket.on('eraser',newerasedDrawing)
+	socket.on('erasing',newerasedDrawing)
 	if(perm!='false')
 	{
 		clearbtn.addEventListener('click',async(e)=>{
 			socket.emit('erase')
 		})
 		eraser.addEventListener('click',async(e)=>{
-			if(eraserenable){
-				eraserenable=false
-			}else{
-				eraserenable=true
+			if(!eraserenable){
+				eraser.textContent = 'Draw'
+			}else {
+				eraser.textContent = 'Eraser'
 			}
+			eraserenable=(!eraserenable)
 		})
 	}
 	socket.on('eraseall',erasemsg)
@@ -57,25 +59,33 @@ function setup(){
 console.log(clearbtn)
 
 function newDrawing(data){
-	console.log(data)
-	console.log(data.x,data.y)
-		let type =data.typepen
-		let size = data.sizepen
-		let color = data.colorpen
-		fill(color);
-		stroke(color);
+	let type =data.typepen
+	let size = data.sizepen
+	let color = data.colorpen
+	fill(color);
+	stroke(color);
 		
-		if(type == "pencil"){
-			// mouseX = data.x
-			// mouseY=data.y
-			line(data.px, data.py, data.x, data.y);
-		  } else {
-			ellipse(data.x, data.y, size, size);
-		  }
+	if(type == "pencil"){
+		line(data.px, data.py, data.x, data.y);
+	} else {
+		ellipse(data.x, data.y, size, size);
+	}
 }
 
 function newerasedDrawing(data){
-	location.assign('/jamboard?_id='+data.jamid+'&_uid='+data.userid+'&p='+perm)
+	// erase(2,0)
+	let type =data.typepen
+	let size = data.sizepen
+	let color = data.colorpen
+	fill(color);
+	stroke(color);
+		
+	if(type == "pencil"){
+		line(data.px, data.py, data.x, data.y);
+	} else {
+		ellipse(data.x, data.y, size, size);
+	}
+	// noErase()
 }
 
 function mouseReleased(){
@@ -84,13 +94,13 @@ function mouseReleased(){
 		if(dragged)
 		{
 			console.log('inside released if')
-			if(eraserenable)
-			{
-				console.log(arr)
-				socket.emit('eraser',arr);
-			}else{
-				socket.emit('mouse',arr);
-			}
+			// if(eraserenable){
+			// 	console.log(arr)
+			// 	socket.emit('eraser',arr);
+			// }else {
+			// 	socket.emit('mouse',arr);
+			// }
+			socket.emit('mouse',arr);
 			arr=[]
 			dragged=false	
 		}
@@ -101,16 +111,16 @@ function mouseReleased(){
 function mouseDragged()
 {
 	let type = _("#pen-pencil").checked?"pencil":"brush";
-		let size = parseInt(_("#pen-size").value);
-		let color = _("#pen-color").value;
+	let size = parseInt(_("#pen-size").value);
+	let color = _("#pen-color").value;
 	if(perm!="false")
 	{
 		dragged = true
-		if(eraserenable){
-			erase()
-		}else{
-			noErase()
-		}
+		// if(eraserenable){
+		// 	erase(2,0)
+		// }else {
+		// 	noErase()
+		// }
 		var data= {
 			x: mouseX,
 			y: mouseY,
@@ -120,9 +130,18 @@ function mouseDragged()
 			px:pmouseX,
 			py:pmouseY
 		}
+		if(eraserenable){
+			data.colorpen = '#333333'
+			socket.emit('erasing',data)
+		}
 		arr.push(data);
-		fill(color);
-		stroke(color);
+		if(eraserenable){
+			fill('#333333');
+		    stroke('#333333');
+		}else{
+			fill(color);
+		    stroke(color);
+		}
 
 		if(type == "pencil"){
 			line(pmouseX, pmouseY, mouseX, mouseY);
