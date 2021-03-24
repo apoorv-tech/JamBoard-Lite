@@ -15,7 +15,7 @@ const mongoose = require("mongoose")
 const bodyParser = require('body-parser')
 
 dotenv.config({
-	path:"./config/config.env"
+	path:"./config/.env"
 })
 
 require('./config/passport-setup')(passport);
