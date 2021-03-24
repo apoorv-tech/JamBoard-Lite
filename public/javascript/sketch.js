@@ -30,7 +30,7 @@ function setup(){
 	background(51)
 	console.log(jamid)
 	console.log(userid)
-	socket = io.connect('https://jamboard-lite.herokuapp.com',{
+	socket = io.connect(process.env.URL,{
 		query: {
 			_id: jamid,
 			_uid: userid 
