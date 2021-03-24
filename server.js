@@ -55,14 +55,9 @@ app.get('/',(req,res)=>{
 })
 
 
+const connectDB = require('./config/db');
+connectDB();
 
-mongoose.connect("mongodb+srv://user2:WAcpv8bt27VmFpLW@cluster0.2azvv.mongodb.net/Jamboard",{
-    useNewUrlParser:true,
-    useUnifiedTopology:true,
-    useCreateIndex:true
-}).then(()=>{
-    console.log("connected to the database")
-})
 
 let server = app.listen(process.env.PORT || 4000)
 console.log("app has started")
