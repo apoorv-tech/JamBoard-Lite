@@ -19,6 +19,23 @@ input {
   overflow: hidden;
 }
 
+.mycontainer{
+  max-width: 1200px;
+  margin: auto;
+  margin-bottom: 3 rem;
+  padding: 0;
+}
+
+#jam-bar {
+  
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 993;
+}
+.myinner-container{
+  margin: 0 2rem;
+}
 .forms-container {
   position: absolute;
   width: 100%;
