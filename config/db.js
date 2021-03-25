@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 
+
 const mongoAtlasUri = process.env.MONGO_URI;
 const connectdb = async()=>{
     try {
