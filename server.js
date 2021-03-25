@@ -88,13 +88,9 @@ async function newConnection(socket)
 		console.log('join is trigerred')
 		await Jamboard.findOne({ _id: socket.jamid }).then((jaam)=>{
 		    const listuser = jaam.users
-		    console.log(listuser,"hello")
-		    console.log(data.jam)
-		    console.log(socket.userid)
 			let exists = false;
 			for (let index = 0; index < listuser.length; index++) {
 				const element = listuser[index];
-				console.log("element" + element);
 				const eluserid = String(element.userid)
 				const usid = String(socket.userid)
 				if (eluserid==usid) {
@@ -103,7 +99,6 @@ async function newConnection(socket)
 				}
 			}
 		    if(exists){
-			    console.log(data.jam+" hello")
 			    socket.join(data.jam)
 
 				const hist = jaam.data
