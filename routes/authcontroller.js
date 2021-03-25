@@ -41,7 +41,9 @@ const createtoken = (id)=>{
 }
 
 router.get("/login",(req,res)=>{
-    res.render("authentication/auth")
+    res.render("authentication/auth",{
+        fileused : "auth"
+    })
 })
 
 router.post("/login",async(req,res)=>{
@@ -59,7 +61,9 @@ router.post("/login",async(req,res)=>{
 })
 
 router.get("/signup",(req,res)=>{
-    res.render("authentication/auth")
+    res.render("authentication/auth",{
+        fileused : "auth"
+    })
 })
 
 router.post("/signup",async(req,res)=>{
