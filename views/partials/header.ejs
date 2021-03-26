@@ -6,6 +6,11 @@
       <div class="line"></div>
     </div>
     <ul class="nav-links">
+      <% if(locals.user.displayName) { %>
+        <li><a href="/logout"><%= locals.user.displayName %></a></li>
+      <% } else { %>
+        <li><a href="/login"><%= locals.user.email %></a></li>
+      <% } %>
       <li><a href="/dashboard">Dashboard</a></li>
       <% if(locals.user) { %>
         <li><a href="/logout">Logout</a></li>
