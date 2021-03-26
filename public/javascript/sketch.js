@@ -23,14 +23,13 @@ const eraser = document.querySelector("#eraser")
 console.log('permission is '+perm+' and its type is '+typeof(perm))
 console.log(eraser)
 
-
 function setup(){
-	let mycanvas=createCanvas(innerWidth,550)
-	mycanvas.parent("#webcanvas") 
+	let mycanvas=createCanvas(innerWidth,900)
+	mycanvas.parent("webcanvas") 
 	background(51)
 	console.log(jamid)
 	console.log(userid)
-	socket = io.connect('https://jamboard-lite.herokuapp.com',{
+	socket = io.connect('http://127.0.0.1:4000',{
 		query: {
 			_id: jamid,
 			_uid: userid 
