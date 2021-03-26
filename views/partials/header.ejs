@@ -1,9 +1,23 @@
-<div class="overlay"></div>
-  <header>
-    <div class="navBtn">+</div>
-    <nav> 
-        <a href="">Home</a>
-        <a href="">About</a>
-        <a href="">Contact</a>
-    </nav>
-  </header>
+<% if(locals.fileused != "auth") { %>
+  <nav>
+    <div class="hamburger">
+      <div class="line"></div>
+      <div class="line"></div>
+      <div class="line"></div>
+    </div>
+    <ul class="nav-links">
+      <% if(locals.user.displayName) { %>
+        <li><a href="/logout"><%= locals.user.displayName %></a></li>
+      <% } else { %>
+        <li><a href="/login"><%= locals.user.email %></a></li>
+      <% } %>
+      <li><a href="/dashboard">Dashboard</a></li>
+      <% if(locals.user) { %>
+        <li><a href="/logout">Logout</a></li>
+      <% } else { %>
+        <li><a href="/login">Login</a></li>
+        <li><a href="/signup">Signup</a></li>
+      <% } %>
+    </ul>
+  </nav>
+<% } %> 

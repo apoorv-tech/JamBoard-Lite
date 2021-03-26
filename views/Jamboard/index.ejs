@@ -19,15 +19,13 @@
         <label for="pen-color">Color</label>
         <input type="color" id="pen-color" value="#000">
       </div>
-      <div class="actions">
-        <button id="reset-canvas">Reset</button>
-        <button id="save-canvas">Save</button>
-      </div>
+      
     </div>
     <!-- <div id="canvas-wrapper"></div> -->
   </div>
 <div id="webcanvas"></div>
-<% if(String(owner)==String(userid)) { %>
+<div>
+  <% if(String(owner)==String(userid)) { %>
     <form method="POST" action='/jamboard?_id=<%= jambaord_id %>&_uid=<%= userid %>&_method=PUT' id="adduser">
         <select name="add">
             <% users.forEach(user=>{ %>
@@ -42,8 +40,10 @@
         <button type="submit">Add</button>
     </form>    
 <% }%> 
+</div>
 
-<% if(perm) { %>
+<div>
+  <% if(perm) { %>
     <div style="text-align: center;">
         <button id="eraser">Eraser</button>
     </div>
@@ -51,3 +51,5 @@
         <button id="btnerase">Clear</button>
     </div>
 <% }%> 
+</div>
+

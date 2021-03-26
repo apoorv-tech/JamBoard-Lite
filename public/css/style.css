@@ -1,4 +1,9 @@
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700;800&display=swap");
+/* @import 'shared/jamboard.css'; */
+@import 'shared/header.css';
+@import 'shared/section.css';
+@import 'shared/canvas.css';
+
 
 * {
   margin: 0;
@@ -11,12 +16,23 @@ input {
   font-family: "Poppins", sans-serif;
 }
 
+
+
 .container {
   position: relative;
   width: 100%;
   background-color: #fff;
   min-height: 100vh;
   overflow: hidden;
+}
+
+
+#jam-bar {
+  
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 993;
 }
 
 .forms-container {

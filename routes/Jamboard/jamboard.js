@@ -78,7 +78,7 @@ router.put('/',requireauth,async (req,res)=>{
     console.log("hi in line 74");
     console.log(req.body.add)
     let checkbaaks = req.body.myCheck
-    console.log(checkbaaks);
+    console.log('the checkbox is '+checkbaaks+' with its type as '+typeof(checkbaaks));
     let varpermision = false;
     if (checkbaaks) {
         varpermision=true
