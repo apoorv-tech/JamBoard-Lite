@@ -31,9 +31,9 @@ https://jamboard-lite.herokuapp.com/
 6. Dashboard page
 ![image](https://user-images.githubusercontent.com/60064779/112635627-0d89b580-8e62-11eb-93ae-87d98144ac6f.png)
 
-## Preview Images
-Apoorv Priyadarsh
-Saksham Saxena
+## Developers
+ Apoorv Priyadarsh<br>
+ Saksham Saxena
 
 
 
