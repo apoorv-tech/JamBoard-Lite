@@ -51,7 +51,7 @@ app.use(authrouter)
 
 
 app.get('/',(req,res)=>{
-	res.render('index')
+	res.redirect('/dashboard')
 })
 
 
