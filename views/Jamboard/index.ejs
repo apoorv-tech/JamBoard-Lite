@@ -1,4 +1,5 @@
-<div class="app">
+<% if(perm) { %>
+  <div class="app">
     <div class="controls">
       <div class="title">Sketch</div>
       <div class="type">
@@ -23,6 +24,8 @@
     </div>
     <!-- <div id="canvas-wrapper"></div> -->
   </div>
+<% }%> 
+
 <div id="webcanvas"></div>
 <div>
   <% if(String(owner)==String(userid)) { %>
