@@ -29,7 +29,7 @@ function setup(){
 	background(51)
 	console.log(jamid)
 	console.log(userid)
-	socket = io.connect('https://jamboard-lite.herokuapp.com',{
+	socket = io.connect('https://jamboard-lite.onrender.com',{
 		query: {
 			_id: jamid,
 			_uid: userid 
